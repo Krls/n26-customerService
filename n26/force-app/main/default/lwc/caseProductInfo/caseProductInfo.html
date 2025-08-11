@@ -14,15 +14,18 @@
             </div>
         </template>
 
-        <template lwc:if={showNoProductMessage}>
+        <!-- Mensaje de estado (sin producto) -->
+        <template lwc:if={hasStatusMessage}>
             <div class="slds-p-around_medium">
-                <p>{labels.contactWithoutProductError}</p>
+                {statusMessage}
             </div>
         </template>
 
-        <template if:true={hasError}>
+        <!-- Mensaje de error real -->
+        <template lwc:if={hasError}>
             <div class="slds-p-around_medium slds-text-color_error">
-                {labels.genericError}
+                <lightning-icon icon-name="utility:error" alternative-text="Error" size="small"></lightning-icon>
+                {errorMessage}
             </div>
         </template>
     </lightning-card>

@@ -12,7 +12,8 @@ export default class CaseProductInfo extends LightningElement {
     @api recordId;
     @track product;
     @track errorMessage;
-    isLoading = true;
+    @track statusMessage;
+    isLoading = true;;
 
     labels = {
         productMonthlyCost,
@@ -28,32 +29,54 @@ export default class CaseProductInfo extends LightningElement {
     wiredProduct({ error, data }) {
         this.isLoading = false;
 
+        if (data === null) {
+            this.product = undefined;
+            this.statusMessage = this.labels.contactWithoutProductError;
+            this.errorMessage = undefined;
+            return;
+        }
+
         if (data) {
-            if(data === null){
-                this.product = undefined;
-                this.errorMessage = undefined;
-            }else {
-                this.product = {
-                    ...data,
-                    Monthly_cost__c: this.formatCurrency(data.Monthly_cost__c),
-                    Currencies_Fees__c: this.formatPercentage(data.Currencies_Fees__c),
-                    Card_Replacement_Cost__c: this.formatCurrency(data.Card_Replacement_Cost__c)
-                };
-                this.errorMessage = undefined;
-            }
-        } else if (error) {
+            const currencyCode = data.CurrencyIsoCode || 'EUR';
+            this.product = {
+                ...data,
+                Monthly_cost__c: this.formatCurrency(data.Monthly_cost__c, currencyCode),
+                Currencies_Fees__c: this.formatPercentage(data.Currencies_Fees__c),
+                Card_Replacement_Cost__c: this.formatCurrency(data.Card_Replacement_Cost__c, currencyCode)
+            };
+            this.statusMessage = undefined;
+            this.errorMessage = undefined;
+            return;
+        }
+
+        if (error) {
+            this.product = undefined;
+            this.statusMessage = undefined;
             this.errorMessage = error;
             console.error('Error Apex:', error);
         }
     }
 
-    formatCurrency(value) {
+    // Getter booleano para la plantilla
+    get hasError() {
+        return !!this.errorMessage;
+    }
+
+    get hasStatusMessage() {
+        return !!this.statusMessage;
+    }
+
+    get hasProduct() {
+        return this.product !== undefined && this.product !== null;
+    }
+
+    formatCurrency(value, currencyCode) {
         if (value === null || value === undefined) {
             return '—';
         }
         return new Intl.NumberFormat('es-ES', {
             style: 'currency',
-            currency: 'EUR'
+            currency: currencyCode
         }).format(value);
     }
 
@@ -61,21 +84,11 @@ export default class CaseProductInfo extends LightningElement {
         if (value === null || value === undefined) {
             return '—';
         }
+        const numeric = Number(value);
+        if (isNaN(numeric)) return '—';
         return new Intl.NumberFormat('es-ES', {
             style: 'percent',
             minimumFractionDigits: 2
-        }).format(value / 100);
-    }
-
-    get hasProduct() {
-        return this.product !== null && this.product !== undefined;
-    }
-
-    get showNoProductMessage() {
-        return !this.hasProduct && !this.isLoading && this.errorMessage != null && this.errorMessage != undefined;
-    }
-
-    get hasError() {
-        return !!this.errorMessage;
+        }).format(numeric / 100);
     }
 }
