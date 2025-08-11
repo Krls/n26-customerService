@@ -7,6 +7,7 @@ import genericError from '@salesforce/label/c.Generic_Error';
 import contactWithoutProductError from '@salesforce/label/c.Contact_Without_Product_Error';
 import spinnerLabel from '@salesforce/label/c.Spinner_Label';
 import productIformation from '@salesforce/label/c.Product_Information_Label';
+import productName from '@salesforce/label/c.Product_Namr_Label';
 
 export default class CaseProductInfo extends LightningElement {
     @api recordId;
@@ -16,6 +17,7 @@ export default class CaseProductInfo extends LightningElement {
     isLoading = true;;
 
     labels = {
+        productName,
         productMonthlyCost,
         productCurrenciesFees,
         productCardReplacement,

@@ -49,4 +49,11 @@
         <shortDescription>Spinner_Label</shortDescription>
         <value>Loading information</value>
     </labels>
+    <labels>
+        <fullName>Product_Namr_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Product_Namr_Label</shortDescription>
+        <value>Product name</value>
+    </labels>
 </CustomLabels>

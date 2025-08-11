@@ -8,6 +8,7 @@
 
         <template lwc:if={hasProduct}>
             <div class="slds-p-around_medium">
+                <p><b>{labels.productName}:</b> {product.Name}</p>
                 <p><b>{labels.productMonthlyCost}:</b> {product.Monthly_cost__c}</p>
                 <p><b>{labels.productCurrenciesFees}:</b> {product.Currencies_Fees__c}</p>
                 <p><b>{labels.productCardReplacement}:</b> {product.Card_Replacement_Cost__c}</p>
