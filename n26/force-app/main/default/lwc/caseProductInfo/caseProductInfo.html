@@ -1,0 +1,29 @@
+<template>
+    <lightning-card title={labels.productIformation} icon-name="standard:product">
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium">
+                <lightning-spinner alternative-text={labels.spinnerLabel} size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:if={hasProduct}>
+            <div class="slds-p-around_medium">
+                <p><b>{labels.productMonthlyCost}:</b> {product.Monthly_cost__c}</p>
+                <p><b>{labels.productCurrenciesFees}:</b> {product.Currencies_Fees__c}</p>
+                <p><b>{labels.productCardReplacement}:</b> {product.Card_Replacement_Cost__c}</p>
+            </div>
+        </template>
+
+        <template lwc:if={showNoProductMessage}>
+            <div class="slds-p-around_medium">
+                <p>{labels.contactWithoutProductError}</p>
+            </div>
+        </template>
+
+        <template if:true={hasError}>
+            <div class="slds-p-around_medium slds-text-color_error">
+                {labels.genericError}
+            </div>
+        </template>
+    </lightning-card>
+</template>
